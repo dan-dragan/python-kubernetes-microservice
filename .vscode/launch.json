@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "env": {
+                "FLASK_RUN_HOST":"0.0.0.0",
+                "FLASK_SERVER_PORT_USER":"5004",
+                "FLASK_SERVER_PORT_MOVIES":"5001",
+                "FLASK_SERVER_PORT_SHOWTIMES":"5002",
+                "FLASK_SERVER_PORT_BOOKINGS":"5003",
+                "FLASK_ENV":"development"
+              }            
+        }
+    ]
+}

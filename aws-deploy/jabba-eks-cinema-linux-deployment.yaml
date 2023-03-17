@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jabba-eks-web-user-linux-deployment
+  namespace: jabba-eks-web-user-app
+  labels:
+    app: jabba-eks-web-user-linux-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jabba-eks-web-user-linux-app
+  template:
+    metadata:
+      labels:
+        app: jabba-eks-web-user-linux-app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+      containers:
+      - name: webapp-nginx
+        image: cinema-nginx:latest
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: Never
+      - name: webapp-user
+        image: cinema-web-user:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000        
+      nodeSelector:
+        kubernetes.io/os: linux
+---        
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-user-service
+spec:
+  selector:
+    app: web-user
+  ports:
+  - protocol: "TCP"
+    port: 6000
+    targetPort: 80
+  type: LoadBalancer                
